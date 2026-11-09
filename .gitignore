@@ -1,8 +1,10 @@
-.idea
-.kilo
-
+# Environment variables
 .env
 
-/develop
+# IDEs
+.idea/
+.vscode/
 
-id_rsa.pub
+# OS files
+.DS_Store
+Thumbs.db

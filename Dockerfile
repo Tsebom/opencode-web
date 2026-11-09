@@ -4,16 +4,16 @@ FROM node:20-slim
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
     npm install -g @opencode/cli
 
-# Create a non-root user for security
-RUN groupadd -r opencode && useradd -r -g opencode -m -s /bin/bash opencode
+# Create a non-root user for security with non-standard UID/GID
+RUN groupadd -g 1050 agent && useradd -u 1050 -g agent -m -s /bin/bash agent
 
 # Create necessary directories and set permissions
-RUN mkdir -p /home/opencode/.config/opencode && \
-    chown -R opencode:opencode /home/opencode
+RUN mkdir -p /home/agent/.config/opencode && \
+    chown -R agent:agent /home/agent
 
 # Switch to the non-root user
 USER agent
-WORKDIR /home/opencode
+WORKDIR /home/agent
 
 # Expose the port (actual port is set via CMD)
 EXPOSE 4096
