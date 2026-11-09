@@ -1,0 +1,97 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+	"shell": "/bin/bash",
+	"snapshots": true,
+	"formatter": true,
+	"watcher": {
+    "ignore": [".opencode/**"],
+  },
+	"websearch": {
+    "provider": "random"
+  },
+	"media": {
+    "image": {
+      "auto_resize": true,
+      "max_width": 2000,
+      "max_height": 2000,
+      "max_base64_bytes": 5242880
+    }
+  },
+	"compaction": {
+    "auto": true,
+    "keep": {
+      "tokens": 15000
+    },
+    "buffer": 20000
+  },
+	"worktree": {
+    "directory": ".lane/trees"
+  },
+  "provider": {
+    "wormsoft": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "My Custom Provider",
+      "options": {
+        "baseURL": "https://ai.wormsoft.ru/api/gpt",
+        "apiKey": "{env:WORMSOFT_API_KEY}" // Ключ хранится в отдельном файле .env
+      },
+      "models": {
+        "wormsoft/mine/onlycode": {
+          "name": "MyCode"
+        },
+				"wormsoft/agent/low": {
+          "name": "LowAgent"
+        },
+				"wormsoft/agent/medium": {
+          "name": "MediumAgent"
+        },
+				"wormsoft/agent/high": {
+          "name": "HighAgent"
+        },
+				"wormsoft/code/low": {
+          "name": "LowCode"
+        },
+				"wormsoft/code/medium": {
+          "name": "MediumCode"
+        },
+				"wormsoft/code/high": {
+          "name": "HighCode"
+        },
+				"wormsoft/vision/low": {
+          "name": "LowVision"
+        },
+				"wormsoft/vision/medium": {
+          "name": "MediumVision"
+        },
+				"wormsoft/codevision/high": {
+          "name": "HighVision"
+        }
+      }
+    },
+    "polza": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://polza.ai/api/v1",
+        "apiKey": "{env:POLZA_API_KEY}" // Ключ хранится в отдельном файле .env
+      },
+      "models": {
+        "minimax/minimax-m3": {
+          "name": "PolzaCode"
+        }
+      }
+    }
+  },
+	"mcp": {
+    "servers": {
+			"context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "oauth": false,
+				"disabled": false,
+        "headers": {
+          "Authorization": "Bearer {env:CONTEXT7_API_KEY}" // Ключ хранится в отдельном файле .env
+        }
+      }
+    }
+  }
+}
