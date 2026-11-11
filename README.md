@@ -32,9 +32,9 @@ These should be set in your `.env` file.
 - `OPENCODE_PORT`: The port the server will run on (default: `4096`).
 - `OPENCODE_PASSWORD`: The password for the Web UI and API. If not set, a random one will be generated and visible in `docker logs opencode-standalone`.
 
-### Config File (`config/opencode.jsonc`)
+### Config File (`.opencode/opencode.jsonc`)
 The configuration file is mounted as **read-only**. To change settings:
-1. Edit the local `config/opencode.jsonc`.
+1. Edit the local `.opencode/opencode.jsonc`.
 2. Restart the container: `docker compose restart`.
 
 ## 🛠 Maintenance
