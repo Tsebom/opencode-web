@@ -37,6 +37,35 @@ The configuration file is mounted as **read-only**. To change settings:
 1. Edit the local `.opencode/opencode.jsonc`.
 2. Restart the container: `docker compose restart`.
 
+## 🔐 Permissions and SSH Setup
+
+To allow the agent to automatically generate and manage SSH keys, the file permissions on your host machine must match the internal user of the container (UID: 1050, GID: 1050).
+
+**1. Create a corresponding user on your host (one-time setup):**
+Run the following commands in your terminal to create a group and user with the specific IDs:
+```bash
+sudo groupadd -g 1050 agent
+sudo useradd -u 1050 -g agent -m agent
+```
+
+**2. Set the ownership for the project folder:**
+Navigate to the `opencode-standalone-web` directory and run:
+```bash
+sudo chown -R agent:agent .opencode
+```
+
+This ensures that when the container mounts the `.opencode` folder, the `agent` user inside the container has full read and write permissions for the SSH keys and configuration files.
+
+**3. Verify the setup:**
+To check if the user `agent` can read the generated keys, you can run commands under this user's context:
+```bash
+# List the SSH folder contents
+sudo -u agent ls -l .opencode/ssh
+
+# View the public key
+sudo -u agent cat .opencode/ssh/id_ed25519.pub
+```
+
 ## 🛠 Maintenance
 
 **Viewing Logs:**
