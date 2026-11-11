@@ -33,7 +33,7 @@
       "name": "My Custom Provider",
       "options": {
         "baseURL": "https://ai.wormsoft.ru/api/gpt",
-        "apiKey": "{env:WORMSOFT_API_KEY}"
+        "apiKey": "{env:WORMSOFT_API_KEY}" // Ключ хранится в отдельном файле .env
       },
       "models": {
         "wormsoft/mine/onlycode": {
@@ -72,7 +72,7 @@
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "baseURL": "https://polza.ai/api/v1",
-        "apiKey": "{env:POLZA_API_KEY}"
+        "apiKey": "{env:POLZA_API_KEY}" // Ключ хранится в отдельном файле .env
       },
       "models": {
         "minimax/minimax-m3": {
@@ -89,7 +89,7 @@
         "oauth": false,
         "disabled": false,
         "headers": {
-          "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
+          "Authorization": "Bearer {env:CONTEXT7_API_KEY}" // Ключ хранится в отдельном файле .env
         }
       }
     }
