@@ -1,7 +1,8 @@
 FROM node:20-slim
 
 # Install OpenCode CLI globally and curl for healthchecks
-RUN apt-get update && apt-get install -y curl openssh-client git && rm -rf /var/lib/apt/lists/* && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl openssh-client git && \
+    rm -rf /var/lib/apt/lists/* && \
     npm install -g @opencode/cli
 
 # Create a non-root user for security with non-standard UID/GID
