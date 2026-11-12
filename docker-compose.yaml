@@ -6,7 +6,10 @@ services:
       - "${OPENCODE_PORT:-4096}:${OPENCODE_PORT:-4096}"
     volumes:
       - ./.opencode/opencode.jsonc:/home/agent/.config/opencode/opencode.jsonc:ro
+      - ./.opencode/AGENTS.md:/home/agent/.config/opencode/AGENTS.md:ro
       - ./.opencode/ssh:/home/agent/.ssh:rw
+      # Persist the OpenCode service state (sessions, etc.) across container recreations
+      - opencode-data:/home/agent/.local/share/opencode
     environment:
       - OPENCODE_PORT=${OPENCODE_PORT:-4096}
       - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
@@ -21,3 +24,6 @@ services:
       retries: 3
       start_period: 10s
     restart: unless-stopped
+
+volumes:
+  opencode-data:

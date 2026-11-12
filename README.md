@@ -37,6 +37,13 @@ The configuration file is mounted as **read-only**. To change settings:
 1. Edit the local `.opencode/opencode.jsonc`.
 2. Restart the container: `docker compose restart`.
 
+### Git Identity
+The agent commits under the identity provided via `GIT_USER_NAME` and `GIT_USER_EMAIL`
+in your `.env` file. The entrypoint applies it to the container's `git` config on
+every start, so all commits made by the agent are attributed to your account.
+The connected account is also documented in `AGENTS.md`, which OpenCode loads
+automatically for every session in this project.
+
 ## 🔐 Permissions and SSH Setup
 
 To allow the agent to automatically generate and manage SSH keys, the file permissions on your host machine must match the internal user of the container (UID: 1050, GID: 1050).
