@@ -1,9 +1,6 @@
 # Environment variables
 .env
 
-# Global agent instructions (mounted into the container, not part of the repo)
-.opencode/AGENTS.md
-
 # IDEs
 .idea/
 .vscode/

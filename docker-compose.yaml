@@ -6,7 +6,6 @@ services:
       - "${OPENCODE_PORT:-4096}:${OPENCODE_PORT:-4096}"
     volumes:
       - ./.opencode/opencode.jsonc:/home/agent/.config/opencode/opencode.jsonc:ro
-      - ./.opencode/AGENTS.md:/home/agent/.config/opencode/AGENTS.md:ro
       - ./.opencode/ssh:/home/agent/.ssh:rw
       # Persist the OpenCode service state (sessions, etc.) across container recreations
       - opencode-data:/home/agent/.local/share/opencode
@@ -17,6 +16,8 @@ services:
       - POLZA_API_KEY=${POLZA_API_KEY}
       - CONTEXT7_API_KEY=${CONTEXT7_API_KEY}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GIT_USER_NAME=${GIT_USER_NAME}
+      - GIT_USER_EMAIL=${GIT_USER_EMAIL}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${OPENCODE_PORT:-4096}/api/info", "-u", "opencode:${OPENCODE_PASSWORD}"]
       interval: 30s
