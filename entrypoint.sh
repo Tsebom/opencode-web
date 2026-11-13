@@ -14,22 +14,23 @@ if [ -n "${GIT_USER_NAME}" ] && [ -n "${GIT_USER_EMAIL}" ]; then
 
 ## Git identity (all projects)
 
-Connected Git account for this machine/container:
+You work as a contributor through your own personal Git account
+(created specifically for you, the agent). It is YOUR account:
 - Name: $GIT_USER_NAME
 - Email: $GIT_USER_EMAIL
 
 Rules:
 
-- Commits and tags are made under the identity from git config
-  (user.name / user.email) - that is the connected account.
+- Use the personal account for all git operations: commits, tags,
+  pushes, pull requests, and GitHub API calls. Commits and tags are
+  made under the identity from git config (user.name / user.email).
 - Before the first commit of a session, check git config user.name and
   git config user.email. If a value is empty, matches the agent built-in
-  default identity, or clearly does not belong to the connected account,
+  default identity, or clearly does not belong to the personal account,
   ask the user for the correct name/email and set it repo-locally with
   git config user.name "<name>" / git config user.email "<email>".
 - Never use the agent built-in default identity or any other default
-  identity.
-- Never commit under personal/foreign accounts unrelated to the task.
+  identity; never commit under foreign accounts.
 
 Do not write account names or emails into repository files (AGENTS.md,
 README, configs) - keep them only in .env, git config, and this global
