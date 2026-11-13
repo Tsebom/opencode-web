@@ -38,14 +38,22 @@ repository.
 EOF
 fi
 
-# Check if SSH key exists
+# SSH bootstrap: ensure the directory and key exist.
+# /home/agent/.ssh is a bind mount (.opencode/ssh on the host). If the host
+# volume is not owned by the container user (UID 1050), chmod/keygen fail -
+# warn and continue instead of crash-looping the container.
+mkdir -p /home/agent/.ssh 2>/dev/null || true
+if ! chmod 700 /home/agent/.ssh 2>/dev/null; then
+    echo "WARN: cannot chmod /home/agent/.ssh - host volume is not owned by UID 1050."
+    echo "Fix on the host: sudo chown -R 1050:1050 .opencode/ssh"
+fi
+
 if [ ! -f "/home/agent/.ssh/id_ed25519" ]; then
-    # Ensure directory exists with correct permissions
-    mkdir -p /home/agent/.ssh
-    chmod 700 /home/agent/.ssh
-    
     # Generate the key without a passphrase
-    ssh-keygen -t ed25519 -f /home/agent/.ssh/id_ed25519 -N ""
+    if ! ssh-keygen -t ed25519 -f /home/agent/.ssh/id_ed25519 -N ""; then
+        echo "WARN: could not generate SSH key - .opencode/ssh is not writable by UID 1050."
+        echo "Fix on the host: sudo chown -R 1050:1050 .opencode/ssh"
+    fi
 fi
 
 # Execute the original command passed as arguments
