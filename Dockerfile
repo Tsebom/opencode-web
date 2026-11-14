@@ -30,9 +30,12 @@ USER agent
 WORKDIR /workspace
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["sh", "-c", "opencode serve --hostname 0.0.0.0 --port ${OPENCODE_PORT:-4096}"]
+# Exec form: no shell, no env interpolation. The container always listens on
+# 4096; the host-side port is configured via the ports mapping in
+# docker-compose.yaml (OPENCODE_PORT).
+CMD ["opencode", "serve", "--hostname", "0.0.0.0", "--port", "4096"]
 
-# Expose the port (actual port is set via CMD)
+# Expose the fixed internal port (host mapping is set in docker-compose)
 EXPOSE 4096
 
 

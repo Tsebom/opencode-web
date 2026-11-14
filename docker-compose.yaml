@@ -3,14 +3,13 @@ services:
     build: .
     container_name: opencode-standalone
     ports:
-      - "${OPENCODE_PORT:-4096}:${OPENCODE_PORT:-4096}"
+      - "${OPENCODE_PORT:-4096}:4096"
     volumes:
       - ./.opencode/opencode.jsonc:/home/agent/.config/opencode/opencode.jsonc:ro
       - ./.opencode/ssh:/home/agent/.ssh:rw
       # Persist the OpenCode service state (sessions, etc.) across container recreations
       - opencode-data:/home/agent/.local/share/opencode
     environment:
-      - OPENCODE_PORT=${OPENCODE_PORT:-4096}
       - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
       - WORMSOFT_API_KEY=${WORMSOFT_API_KEY}
       - POLZA_API_KEY=${POLZA_API_KEY}
@@ -19,7 +18,7 @@ services:
       - GIT_USER_NAME=${GIT_USER_NAME}
       - GIT_USER_EMAIL=${GIT_USER_EMAIL}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${OPENCODE_PORT:-4096}/api/info", "-u", "opencode:${OPENCODE_PASSWORD}"]
+      test: ["CMD", "curl", "-f", "http://localhost:4096/api/info", "-u", "opencode:${OPENCODE_PASSWORD}"]
       interval: 30s
       timeout: 10s
       retries: 3
