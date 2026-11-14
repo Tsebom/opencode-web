@@ -29,7 +29,7 @@ The server uses the `opencode.jsonc` file for provider configurations. It looks 
 These should be set in your `.env` file.
 
 ### Server Settings
-- `OPENCODE_PORT`: The port the server will run on (default: `4096`).
+- `OPENCODE_PORT`: The host port where the Web UI / API is published (default: `4096`). The container always listens internally on port 4096.
 - `OPENCODE_PASSWORD`: The password for the Web UI and API. If not set, a random one will be generated and visible in `docker logs opencode-standalone`.
 
 ### Config File (`.opencode/opencode.jsonc`)
