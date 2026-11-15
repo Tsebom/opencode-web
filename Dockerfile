@@ -1,7 +1,9 @@
 FROM node:20-slim
 
 # Install OpenCode CLI globally and curl for healthchecks
-RUN apt-get update && apt-get install -y --no-install-recommends curl openssh-client git && \
+# ca-certificates provides the system root CA bundle (/etc/ssl/certs)
+# so git/curl can verify TLS server certificates
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl openssh-client git && \
     rm -rf /var/lib/apt/lists/* && \
     npm install -g @opencode/cli
 
