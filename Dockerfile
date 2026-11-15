@@ -17,8 +17,9 @@ ENV XDG_DATA_HOME=/home/agent/.local/share
 ENV XDG_CACHE_HOME=/home/agent/.cache
 
 # Create necessary directories and set permissions
-# /home/agent/.local/share/opencode must exist in the image so that the
-# opencode-data named volume is initialized with the agent's ownership
+# /home/agent/.local/share/opencode and /workspace must exist in the image
+# so that the opencode-data and opencode-workspace named volumes are
+# initialized with the agent's ownership
 # (Docker creates missing volume mount points as root)
 RUN mkdir -p /home/agent/.config/opencode /home/agent/.local/share/opencode /workspace && \
     chown -R agent:agent /home/agent /workspace

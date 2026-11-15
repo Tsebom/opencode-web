@@ -9,6 +9,11 @@ services:
       - ./.opencode/ssh:/home/agent/.ssh:rw
       # Persist the OpenCode service state (sessions, etc.) across container recreations
       - opencode-data:/home/agent/.local/share/opencode
+      # Persist the working directory (cloned repos, agent work) across
+      # container recreations. /workspace is created in the image with
+      # agent:agent ownership, so the volume is initialized with correct
+      # permissions (Docker creates missing volume mount points as root)
+      - opencode-workspace:/workspace
     environment:
       - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
       - WORMSOFT_API_KEY=${WORMSOFT_API_KEY}
@@ -27,3 +32,4 @@ services:
 
 volumes:
   opencode-data:
+  opencode-workspace:
