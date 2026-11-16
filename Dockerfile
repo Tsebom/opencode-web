@@ -1,11 +1,19 @@
 FROM node:20-slim
 
-# Install OpenCode CLI globally and curl for healthchecks
+# Install OpenCode CLI, Playwright (browser automation for the agent)
+# and curl for healthchecks
 # ca-certificates provides the system root CA bundle (/etc/ssl/certs)
 # so git/curl can verify TLS server certificates
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl openssh-client git && \
     rm -rf /var/lib/apt/lists/* && \
-    npm install -g @opencode/cli
+    npm install -g @opencode/cli playwright @playwright/mcp
+
+# Headless Chromium for the agent (launched by the playwright MCP server).
+# --with-deps installs the required apt dependencies. The browsers are
+# installed to a shared world-readable path so the non-root agent user
+# can use them.
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+RUN npx playwright install --with-deps chromium
 
 # Create a non-root user for security with non-standard UID/GID
 RUN groupadd -g 1050 agent && useradd -u 1050 -g agent -m -s /bin/bash agent
