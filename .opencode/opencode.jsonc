@@ -91,7 +91,18 @@
         "headers": {
           "Authorization": "Bearer {env:CONTEXT7_API_KEY}" // Ключ хранится в отдельном файле .env
         }
+      },
+      "playwright": {
+        "type": "local",
+        "command": ["playwright-mcp", "--browser", "chromium"]
       }
     }
-  }
+  },
+  "permissions": [
+    {
+      "action": "playwright_*",
+      "resource": "*",
+      "effect": "allow"
+    }
+  ]
 }
