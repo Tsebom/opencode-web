@@ -25,6 +25,7 @@ The server uses the `opencode.jsonc` file for provider configurations. It looks 
 - `WORMSOFT_API_KEY`
 - `POLZA_API_KEY`
 - `CONTEXT7_API_KEY`
+- `TAVILY_API_KEY` (web search provider, see `websearch` in `opencode.jsonc`)
 
 These should be set in your `.env` file.
 

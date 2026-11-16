@@ -7,7 +7,7 @@
     "ignore": [".opencode/**"]
   },
   "websearch": {
-    "provider": "random"
+    "provider": "tavily"
   },
   "media": {
     "image": {
