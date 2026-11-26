@@ -8,6 +8,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
     rm -rf /var/lib/apt/lists/* && \
     npm install -g @opencode/cli playwright @playwright/mcp
 
+# GitHub CLI (gh) from the official apt repository (Debian),
+# see https://cli.github.com/ - used by the agent for PRs, issues
+# and API calls. The keyring file name follows the current official docs
+# (PGP key rotation, Sept 2026).
+RUN mkdir -p -m 755 /etc/apt/keyrings && \
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+        -o /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        > /etc/apt/sources.list.d/github-cli.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends gh && \
+    rm -rf /var/lib/apt/lists/*
+
 # Headless Chromium for the agent (launched by the playwright MCP server).
 # --with-deps installs the required apt dependencies. The browsers are
 # installed to a shared world-readable path so the non-root agent user

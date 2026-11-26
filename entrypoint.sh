@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+# GitHub CLI (gh): expose GITHUB_TOKEN as GH_TOKEN so that `gh` is
+# authenticated out of the box for the agent (PRs, issues, API calls).
+# `gh auth setup-git` additionally wires the gh credential helper into git
+# config so plain `git push` over https works without a token in the URL.
+if [ -n "${GITHUB_TOKEN}" ] && [ -z "${GH_TOKEN}" ]; then
+    export GH_TOKEN="${GITHUB_TOKEN}"
+fi
+if [ -n "${GH_TOKEN}" ] && command -v gh > /dev/null 2>&1; then
+    gh auth setup-git >/dev/null 2>&1 || \
+        echo "WARN: gh is installed, but 'gh auth setup-git' failed - gh itself still works via GH_TOKEN."
+fi
+
 # Configure git identity for commits made by the agent
 # (values are provided via environment, see .env.example)
 if [ -n "${GIT_USER_NAME}" ] && [ -n "${GIT_USER_EMAIL}" ]; then
