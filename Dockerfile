@@ -1,12 +1,12 @@
 FROM node:20-slim
 
-# Install OpenCode CLI, Playwright (browser automation for the agent)
-# and curl for healthchecks
+# Install OpenCode CLI, Playwright (browser automation for the agent),
+# code-server (VS Code in the browser) and curl for healthchecks
 # ca-certificates provides the system root CA bundle (/etc/ssl/certs)
 # so git/curl can verify TLS server certificates
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl openssh-client git && \
     rm -rf /var/lib/apt/lists/* && \
-    npm install -g @opencode/cli playwright @playwright/mcp
+    npm install -g @opencode/cli playwright @playwright/mcp code-server
 
 # Headless Chromium for the agent (launched by the playwright MCP server).
 # --with-deps installs the required apt dependencies. The browsers are
@@ -25,11 +25,13 @@ ENV XDG_DATA_HOME=/home/agent/.local/share
 ENV XDG_CACHE_HOME=/home/agent/.cache
 
 # Create necessary directories and set permissions
-# /home/agent/.local/share/opencode and /workspace must exist in the image
-# so that the opencode-data and opencode-workspace named volumes are
-# initialized with the agent's ownership
+# /home/agent/.local/share/opencode, /home/agent/.local/share/code-server
+# and /workspace must exist in the image so that the opencode-data,
+# code-server-data and opencode-workspace named volumes are initialized
+# with the agent's ownership
 # (Docker creates missing volume mount points as root)
-RUN mkdir -p /home/agent/.config/opencode /home/agent/.local/share/opencode /workspace && \
+RUN mkdir -p /home/agent/.config/opencode /home/agent/.local/share/opencode \
+              /home/agent/.local/share/code-server /workspace && \
     chown -R agent:agent /home/agent /workspace
 
 # Copy and setup entrypoint script
@@ -46,7 +48,7 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 # docker-compose.yaml (OPENCODE_PORT).
 CMD ["opencode", "serve", "--hostname", "0.0.0.0", "--port", "4096"]
 
-# Expose the fixed internal port (host mapping is set in docker-compose)
-EXPOSE 4096
+# Expose the fixed internal ports (host mapping is set in docker-compose)
+EXPOSE 4096 8080
 
 

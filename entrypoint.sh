@@ -57,5 +57,29 @@ if [ ! -f "/home/agent/.ssh/id_ed25519" ]; then
     fi
 fi
 
+# Start code-server (VS Code in the browser) in the background.
+# Skipped when CODE_SERVER_PASSWORD is not set: code-server must not run
+# without authentication, and existing setups should stay unaffected.
+# The container always listens on 8080; the host-side port is mapped in
+# docker-compose.yaml (CODE_SERVER_PORT). State (VS Code server cache,
+# extensions) lives in the code-server-data named volume.
+start_code_server() {
+    code-server /workspace \
+        --bind-addr 0.0.0.0:8080 \
+        --auth password \
+        --password "${CODE_SERVER_PASSWORD}" \
+        --extensions-dir /home/agent/.local/share/code-server/extensions \
+        > /tmp/code-server.log 2>&1
+}
+
+if [ -n "${CODE_SERVER_PASSWORD}" ]; then
+    if command -v code-server > /dev/null 2>&1; then
+        start_code_server &
+    else
+        echo "WARN: CODE_SERVER_PASSWORD is set, but code-server is not installed."
+        echo "Fix on the host: docker compose up -d --build"
+    fi
+fi
+
 # Execute the original command passed as arguments
 exec "$@"
