@@ -47,6 +47,37 @@ to your account with no extra setup.
 The commit-identity rules are also documented in `AGENTS.md`, which OpenCode loads
 automatically for every session in this project.
 
+## 🖥️ VS Code in the browser (code-server)
+
+The container can also serve the workspace through **code-server** — a full VS Code
+in the browser, opened on `/workspace`.
+
+1. **Enable it**: set `CODE_SERVER_PASSWORD` in your `.env`. If left empty, code-server
+   is not started at all — it must not run without authentication. `CODE_SERVER_PORT`
+   (default 8080) controls the published host port.
+2. **Rebuild and restart** the container (the image now includes code-server):
+   ```bash
+   docker compose up -d --build
+   ```
+3. **Open** `http://localhost:8080` (or your `CODE_SERVER_PORT`) and log in with
+   `CODE_SERVER_PASSWORD`. The `/workspace` folder is opened automatically.
+
+Notes:
+
+- On first launch code-server downloads the VS Code server (~100 MB) and caches it
+  in the `code-server-data` named volume, so the download happens only once.
+- Extensions installed in code-server persist in the same volume across container
+  recreations.
+- The port is published on all host interfaces. On a remote server, prefer an SSH
+  tunnel instead of exposing the port publicly:
+  ```bash
+  ssh -L 8080:localhost:8080 user@your-server
+  ```
+- code-server logs are written to `/tmp/code-server.log` inside the container:
+  ```bash
+  docker exec opencode-standalone tail -n 50 /tmp/code-server.log
+  ```
+
 ## 🔐 Permissions and SSH Setup
 
 To allow the agent to automatically generate and manage SSH keys, the file permissions on your host machine must match the internal user of the container (UID: 1050, GID: 1050).
